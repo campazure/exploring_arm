@@ -17,7 +17,7 @@ stages:
     container:
       image: seesharprun/campazure:latest
     steps:
-    - script: pandoc lab/readme.md --from markdown --to pdf --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
+    - script: pandoc lab/readme.md --from markdown --to latex --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
       displayName: Build lab guide from Markdown content
     - task: ArchiveFiles@2
       displayName: Compress lab files
