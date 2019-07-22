@@ -24,7 +24,9 @@ stages:
     container:
       image: seesharprun/campazure:latest
     steps:
-    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc ./theme.pptx --output $(Build.ArtifactStagingDirectory)/result.pptx
+    - script: cp /{theme.pptx} .
+      displayName: Copy resource files
+    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/result.pptx
       displayName: Build PowerPoint file from Markdown content
     - task: PublishBuildArtifacts@1
       displayName: Publish PowerPoint file build artifact
