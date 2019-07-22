@@ -26,10 +26,8 @@ stages:
     steps:
     - script: cp /theme.pptx .
       displayName: Copy resource files
-    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.Repository.Name)-$(Build.BuildNumber).pptx
+    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
       displayName: Build PowerPoint file from Markdown content
-    - script: cp $(Build.Repository.Name)-$(Build.BuildNumber).pptx $(Build.ArtifactStagingDirectory)
-      displayName: Copy PowerPoint file to staging directory
     - task: PublishBuildArtifacts@1
       displayName: Publish PowerPoint file build artifact
       inputs:
