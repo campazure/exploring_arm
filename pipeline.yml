@@ -46,4 +46,7 @@ stages:
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: current
+        downloadType: single
+        artifactName: deck
         downloadPath: ./
+    - script: dir
