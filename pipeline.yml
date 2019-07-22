@@ -17,9 +17,11 @@ stages:
     container:
       image: seesharprun/campazure:latest
     steps:
-    - script: pandoc lab/readme.md --from markdown --to latex --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
+    - script: pandoc readme.md --from markdown --to latex --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
+      workingDirectory: $(Build.SourcesDirectory)/lab 
       displayName: Build lab guide from Markdown content
-    - script: zip -r $(Build.ArtifactStagingDirectory)/labfiles-$(Build.BuildNumber).zip $(Build.SourcesDirectory)/lab/files
+    - script: zip -r $(Build.ArtifactStagingDirectory)/labfiles-$(Build.BuildNumber).zip .
+      workingDirectory: $(Build.SourcesDirectory)/lab/files 
       displayName: Compress lab files
     - task: PublishBuildArtifacts@1
       displayName: Publish lab content artifact
@@ -35,7 +37,8 @@ stages:
     steps:
     - script: cp /theme.pptx .
       displayName: Copy resource files
-    - script: pandoc presentation/readme.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
+    - script: pandoc readme.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
+      workingDirectory: $(Build.SourcesDirectory)/presentation 
       displayName: Build presentation file from Markdown content
     - task: PublishBuildArtifacts@1
       displayName: Publish presentation file build artifact
