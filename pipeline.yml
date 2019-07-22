@@ -1,6 +1,11 @@
 name: 0.$(Rev:rr)
-trigger: 
-- master
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - readme.md
 stages:
 - stage: CI
   displayName: Continuous Integration
@@ -32,13 +37,11 @@ stages:
   condition: succeeded('CI')
   jobs:
   - job: publishpptx
-    displayName: Publish PowerPoint deck
+    displayName: Publish course content
     pool:
       vmImage: ubuntu-latest
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: current
-        downloadType: single
-        artifactName: deck
-        downloadPath: ./release
+        downloadPath: ./
