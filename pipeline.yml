@@ -14,11 +14,25 @@ stages:
     displayName: Build lab content
     pool:
       vmImage: ubuntu-latest
+    container:
+      image: seesharprun/campazure:latest
     steps:
-    - script: echo 'test'
-      displayName: Test
+    - script: pandoc lab/readme.md --from markdown --to pdf --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
+      displayName: Build lab guide from Markdown content
+    - task: ArchiveFiles@2
+      displayName: Compress lab files
+      inputs:
+        rootFolderOrFile: $(Build.SourcesDirectory)\lab\files
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)\labfiles-$(Build.BuildNumber).zip
+    - task: PublishBuildArtifacts@1
+      displayName: Publish lab content artifact
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: lab
   - job: buildpptx
-    displayName: Build PowerPoint deck
+    displayName: Build presentation deck
     pool:
       vmImage: ubuntu-latest
     container:
@@ -26,10 +40,10 @@ stages:
     steps:
     - script: cp /theme.pptx .
       displayName: Copy resource files
-    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
-      displayName: Build PowerPoint file from Markdown content
+    - script: pandoc presentation/readme.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
+      displayName: Build presentation file from Markdown content
     - task: PublishBuildArtifacts@1
-      displayName: Publish PowerPoint file build artifact
+      displayName: Publish presentation file build artifact
       inputs:
         pathtoPublish: $(Build.ArtifactStagingDirectory)
         artifactName: deck
@@ -44,11 +58,18 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: DownloadBuildArtifacts@0
-      displayName: Download PowerPoitn build artifact
+      displayName: Download presentation build artifact
       inputs:
         buildType: current
         downloadType: single
         artifactName: deck
+        downloadPath: $(Build.SourcesDirectory)/out
+    - task: DownloadBuildArtifacts@0
+      displayName: Download lab build artifacts
+      inputs:
+        buildType: current
+        downloadType: single
+        artifactName: lab
         downloadPath: $(Build.SourcesDirectory)/out
     - task: GitHubRelease@0
       displayName: Create GitHub release
