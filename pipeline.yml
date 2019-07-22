@@ -17,7 +17,9 @@ stages:
     container:
       image: seesharprun/campazure:latest
     steps:
-    - script: pandoc readme.md --from markdown --to latex --self-contained --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).pdf
+    - script: cp /theme.docx .
+      displayName: Copy resource files
+    - script: pandoc readme.md --from markdown --to docx --self-contained --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).docx
       workingDirectory: $(Build.SourcesDirectory)/lab 
       displayName: Build lab guide from Markdown content
     - script: zip -r $(Build.ArtifactStagingDirectory)/labfiles-$(Build.BuildNumber).zip .
