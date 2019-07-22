@@ -22,7 +22,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: Compress lab files
       inputs:
-        rootFolderOrFile: $(Build.SourcesDirectory)\lab\files
+        rootFolderOrFile: lab\files
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)\labfiles-$(Build.BuildNumber).zip
