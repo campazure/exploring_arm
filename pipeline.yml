@@ -1,0 +1,44 @@
+name: 0.$(Rev:rr)
+trigger: 
+- master
+stages:
+- stage: CI
+  displayName: Continuous Integration
+  jobs:
+  - job: buildlab
+    displayName: Build lab content
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - script: echo 'test'
+      displayName: Test
+  - job: buildpptx
+    displayName: Build PowerPoint deck
+    pool:
+      vmImage: ubuntu-latest
+    container:
+      image: seesharprun/campazure:latest
+    steps:
+    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output out/result.pptx
+      displayName: Build PowerPoint file from Markdown content
+    - task: PublishBuildArtifacts@1
+      displayName: Publish PowerPoint file build artifact
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: deck
+- stage: CD
+  displayName: Continuous Deployment
+  dependsOn: CI
+  condition: succeeded('CI')
+  jobs:
+  - job: publishpptx
+    displayName: Publish PowerPoint deck
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: current
+        downloadType: single
+        artifactName: deck
+        downloadPath: ./release
