@@ -26,7 +26,7 @@ stages:
     steps:
     - script: cp /theme.pptx .
       displayName: Copy resource files
-    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/result.pptx
+    - script: pandoc content.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/$(Build.Repository.Name)-$(Build.BuildNumber).pptx
       displayName: Build PowerPoint file from Markdown content
     - task: PublishBuildArtifacts@1
       displayName: Publish PowerPoint file build artifact
@@ -48,5 +48,18 @@ stages:
         buildType: current
         downloadType: single
         artifactName: deck
-        downloadPath: $(Build.SourcesDirectory)
-    - script: find .
+        downloadPath: $(Build.SourcesDirectory)/out
+    - task: GitHubRelease@0
+      displayName: Create GitHub release
+      inputs:
+        gitHubConnection: seesharprun-github
+        repositoryName: $(Build.Repository.Name)
+        tagSource: manual
+        tag: v$(Build.BuildNumber)
+        title: Version $(Build.BuildNumber)
+        releaseNotesSource: input
+        releaseNotes: # Version $(Build.BuildNumber) Release
+        assets: 
+        - $(Build.SourcesDirectory)/out/deck/*.pptx
+        assetUploadMode: replace
+        isPreRelease: true
