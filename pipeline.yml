@@ -26,6 +26,7 @@ stages:
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/labfiles-$(Build.BuildNumber).zip
+        verbose: true
     - task: PublishBuildArtifacts@1
       displayName: Publish lab content artifact
       inputs:
