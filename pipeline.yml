@@ -18,6 +18,7 @@ stages:
       image: seesharprun/campazure:latest
     steps:
     - script: cp /theme.docx .
+      workingDirectory: $(Build.SourcesDirectory)/lab 
       displayName: Copy resource files
     - script: pandoc readme.md --from markdown --to docx --self-contained --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/labguide-$(Build.BuildNumber).docx
       workingDirectory: $(Build.SourcesDirectory)/lab 
@@ -38,6 +39,7 @@ stages:
       image: seesharprun/campazure:latest
     steps:
     - script: cp /theme.pptx .
+      workingDirectory: $(Build.SourcesDirectory)/presentation 
       displayName: Copy resource files
     - script: pandoc readme.md --from markdown --to pptx --slide-level 2 --self-contained --reference-doc theme.pptx --output $(Build.ArtifactStagingDirectory)/presentation-$(Build.BuildNumber).pptx
       workingDirectory: $(Build.SourcesDirectory)/presentation 
