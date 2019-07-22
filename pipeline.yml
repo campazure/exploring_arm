@@ -49,6 +49,8 @@ stages:
         artifactName: deck
 - stage: CD
   displayName: Continuous Deployment
+  dependsOn: CI
+  condition: succeeded('CI')
   jobs:
   - job: publishpptx
     displayName: Publish course content
