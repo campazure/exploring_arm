@@ -1,5 +1,5 @@
 ---
-fontfamily: FiraSans
+fontfamily: lmssq
 colorlinks: true
 ---
 
