@@ -49,4 +49,4 @@ stages:
         downloadType: single
         artifactName: deck
         downloadPath: $(Build.SourcesDirectory)
-    - script: dir
+    - script: find .
