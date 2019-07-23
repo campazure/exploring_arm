@@ -18,10 +18,10 @@ stages:
       image: seesharprun/campazure:latest
     steps:
     - script: cp /theme.docx .
-      workingDirectory: $(Build.SourcesDirectory)/demo 
+      workingDirectory: $(Build.SourcesDirectory)/demos 
       displayName: Copy resource files
     - script: pandoc readme.md [0-9][0-9].*.md --from markdown --to docx --self-contained --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/demoguide-$(Build.BuildNumber).docx
-      workingDirectory: $(Build.SourcesDirectory)/demo 
+      workingDirectory: $(Build.SourcesDirectory)/demos 
       displayName: Build demo guide from Markdown content
     - task: PublishBuildArtifacts@1
       displayName: Publish demo content artifact
