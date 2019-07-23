@@ -2,6 +2,8 @@
 
 [![Build Status](https://seesharprun.visualstudio.com/CampAzure/_apis/build/status/campazure.exploringarm?branchName=master)](https://seesharprun.visualstudio.com/CampAzure/_build/latest?definitionId=45&branchName=master)
 
+- **[Download Latest Content in DOCX and PPTX format](../../releases/latest)**
+
 ## Everyone: Lab Instructions
 
 [Click to view lab instructions](lab/readme.md)
