@@ -52,3 +52,7 @@ This is my note.
     "second": "third
 }
 ```
+
+## Image slide
+
+![Work in-progress](images/wip.png)
