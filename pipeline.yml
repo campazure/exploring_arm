@@ -20,7 +20,7 @@ stages:
     - script: cp /theme.docx .
       workingDirectory: $(Build.SourcesDirectory)/demos 
       displayName: Copy resource files
-    - script: pandoc readme.md [0-9][0-9].*.md --from markdown --to docx --self-contained --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/demoguide-$(Build.BuildNumber).docx
+    - script: pandoc readme.md [0-9][0-9].*.md --from markdown --to docx --self-contained --file-scope --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/demoguide-$(Build.BuildNumber).docx
       workingDirectory: $(Build.SourcesDirectory)/demos 
       displayName: Build demo guide from Markdown content
     - task: PublishBuildArtifacts@1
