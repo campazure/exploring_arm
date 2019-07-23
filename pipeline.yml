@@ -10,6 +10,24 @@ stages:
 - stage: CI
   displayName: Continuous Integration
   jobs:
+  - job: builddemo
+    displayName: Build demo content
+    pool:
+      vmImage: ubuntu-latest
+    container:
+      image: seesharprun/campazure:latest
+    steps:
+    - script: cp /theme.docx .
+      workingDirectory: $(Build.SourcesDirectory)/demo 
+      displayName: Copy resource files
+    - script: pandoc readme.md [0-9][0-9].*.md --from markdown --to docx --self-contained --reference-doc theme.docx --output $(Build.ArtifactStagingDirectory)/demoguide-$(Build.BuildNumber).docx
+      workingDirectory: $(Build.SourcesDirectory)/demo 
+      displayName: Build demo guide from Markdown content
+    - task: PublishBuildArtifacts@1
+      displayName: Publish demo content artifact
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: demo
   - job: buildlab
     displayName: Build lab content
     pool:
